@@ -1,5 +1,6 @@
-package abika.sinau.myfoodyapplication
+package abika.sinau.myfoodyapplication.ui
 
+import abika.sinau.myfoodyapplication.R
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController

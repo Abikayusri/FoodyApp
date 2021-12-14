@@ -1,4 +1,4 @@
-package abika.sinau.myfoodyapplication.ui
+package abika.sinau.myfoodyapplication.ui.fragments.foodjoke
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
