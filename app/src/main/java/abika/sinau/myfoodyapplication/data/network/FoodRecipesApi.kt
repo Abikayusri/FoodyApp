@@ -1,4 +1,4 @@
-package abika.sinau.myfoodyapplication
+package abika.sinau.myfoodyapplication.data.network
 
 import abika.sinau.myfoodyapplication.models.FoodRecipe
 import retrofit2.Response
