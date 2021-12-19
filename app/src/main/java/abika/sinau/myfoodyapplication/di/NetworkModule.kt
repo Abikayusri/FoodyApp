@@ -1,6 +1,6 @@
 package abika.sinau.myfoodyapplication.di
 
-import abika.sinau.myfoodyapplication.Constants.Companion.BASE_URL
+import abika.sinau.myfoodyapplication.util.Constants.Companion.BASE_URL
 import abika.sinau.myfoodyapplication.data.network.FoodRecipesApi
 import dagger.Module
 import dagger.Provides

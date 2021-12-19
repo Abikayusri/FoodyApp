@@ -13,6 +13,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import retrofit2.Response
+import java.lang.Exception
 
 class MainViewModel @ViewModelInject constructor(
     private val repository: Repository,
@@ -30,25 +31,25 @@ class MainViewModel @ViewModelInject constructor(
         if (hasInternetConnection()) {
             try {
                 val response = repository.remote.getRecipes(queries)
-                recipesResponse.value = handleRecipesResponse(response)
+                recipesResponse.value = handleFoodRecipesResponse(response)
             } catch (e: Exception) {
-
+                recipesResponse.value = NetworkResult.Error("Recipes not found.")
             }
         } else {
             recipesResponse.value = NetworkResult.Error("No Internet Connection.")
         }
     }
 
-    private fun handleRecipesResponse(response: Response<FoodRecipe>): NetworkResult<FoodRecipe>? {
+    private fun handleFoodRecipesResponse(response: Response<FoodRecipe>): NetworkResult<FoodRecipe>? {
         when {
             response.message().toString().contains("timeout") -> {
                 return NetworkResult.Error("Timeout")
             }
             response.code() == 402 -> {
-                return NetworkResult.Error("API Key Limited")
+                return NetworkResult.Error("API Key Limited.")
             }
             response.body()!!.results.isNullOrEmpty() -> {
-                return NetworkResult.Error("Recipes Not Found")
+                return NetworkResult.Error("Recipes not found.")
             }
             response.isSuccessful -> {
                 val foodRecipes = response.body()
