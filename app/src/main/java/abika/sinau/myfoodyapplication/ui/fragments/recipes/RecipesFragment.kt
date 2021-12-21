@@ -1,16 +1,10 @@
 package abika.sinau.myfoodyapplication.ui.fragments.recipes
 
-import abika.sinau.myfoodyapplication.MainViewModel
+import abika.sinau.myfoodyapplication.viewmodels.MainViewModel
 import abika.sinau.myfoodyapplication.R
 import abika.sinau.myfoodyapplication.adapters.RecipesAdapter
-import abika.sinau.myfoodyapplication.util.Constants.Companion.API_KEY
-import abika.sinau.myfoodyapplication.util.Constants.Companion.QUERY_ADD_RECIPE_INFORMATION
-import abika.sinau.myfoodyapplication.util.Constants.Companion.QUERY_API_KEY
-import abika.sinau.myfoodyapplication.util.Constants.Companion.QUERY_DIET
-import abika.sinau.myfoodyapplication.util.Constants.Companion.QUERY_FILL_INGREDIENTS
-import abika.sinau.myfoodyapplication.util.Constants.Companion.QUERY_NUMBER
-import abika.sinau.myfoodyapplication.util.Constants.Companion.QUERY_TYPE
 import abika.sinau.myfoodyapplication.util.NetworkResult
+import abika.sinau.myfoodyapplication.viewmodels.RecipesViewModel
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -26,14 +20,14 @@ import kotlinx.android.synthetic.main.fragment_recipes.view.*
 class RecipesFragment : Fragment() {
 
     private lateinit var mainViewModel: MainViewModel
-//    private lateinit var recipesViewModel: RecipesViewModel
+    private lateinit var recipesViewModel: RecipesViewModel
     private val mAdapter by lazy { RecipesAdapter() }
     private lateinit var mView: View
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mainViewModel = ViewModelProvider(requireActivity()).get(MainViewModel::class.java)
-//        recipesViewModel = ViewModelProvider(requireActivity()).get(RecipesViewModel::class.java)
+        recipesViewModel = ViewModelProvider(requireActivity()).get(RecipesViewModel::class.java)
     }
 
     override fun onCreateView(
@@ -50,8 +44,8 @@ class RecipesFragment : Fragment() {
     }
 
     private fun requestApiData() {
-//        mainViewModel.getRecipes(recipesViewModel.applyQueries())
-        mainViewModel.getRecipes(applyQueries())
+        mainViewModel.getRecipes(recipesViewModel.applyQueries())
+//        mainViewModel.getRecipes(applyQueries())
         mainViewModel.recipesResponse.observe(viewLifecycleOwner, { response ->
             when(response){
                 is NetworkResult.Success -> {
@@ -71,19 +65,6 @@ class RecipesFragment : Fragment() {
                 }
             }
         })
-    }
-
-    private fun applyQueries(): HashMap<String, String> {
-        val queries: HashMap<String, String> = HashMap()
-
-        queries[QUERY_NUMBER] = "50"
-        queries[QUERY_API_KEY] = API_KEY
-        queries[QUERY_TYPE] = "snack"
-        queries[QUERY_DIET] = "vegan"
-        queries[QUERY_ADD_RECIPE_INFORMATION] = "true"
-        queries[QUERY_FILL_INGREDIENTS] = "true"
-
-        return queries
     }
 
     private fun setupRecyclerView() {

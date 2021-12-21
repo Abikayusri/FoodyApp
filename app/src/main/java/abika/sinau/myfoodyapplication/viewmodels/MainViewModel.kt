@@ -1,4 +1,4 @@
-package abika.sinau.myfoodyapplication
+package abika.sinau.myfoodyapplication.viewmodels
 
 import abika.sinau.myfoodyapplication.data.Repository
 import abika.sinau.myfoodyapplication.models.FoodRecipe
