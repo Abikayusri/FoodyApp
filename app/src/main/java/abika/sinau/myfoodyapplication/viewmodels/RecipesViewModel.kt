@@ -1,20 +1,56 @@
 package abika.sinau.myfoodyapplication.viewmodels
 
-import abika.sinau.myfoodyapplication.util.Constants
+import abika.sinau.myfoodyapplication.data.DataStoreRepository
+import abika.sinau.myfoodyapplication.util.Constants.Companion.API_KEY
+import abika.sinau.myfoodyapplication.util.Constants.Companion.DEFAULT_DIET_TYPE
+import abika.sinau.myfoodyapplication.util.Constants.Companion.DEFAULT_MEAL_TYPE
+import abika.sinau.myfoodyapplication.util.Constants.Companion.DEFAULT_RECIPES_NUMBER
+import abika.sinau.myfoodyapplication.util.Constants.Companion.QUERY_ADD_RECIPE_INFORMATION
+import abika.sinau.myfoodyapplication.util.Constants.Companion.QUERY_API_KEY
+import abika.sinau.myfoodyapplication.util.Constants.Companion.QUERY_DIET
+import abika.sinau.myfoodyapplication.util.Constants.Companion.QUERY_FILL_INGREDIENTS
+import abika.sinau.myfoodyapplication.util.Constants.Companion.QUERY_NUMBER
+import abika.sinau.myfoodyapplication.util.Constants.Companion.QUERY_TYPE
 import android.app.Application
+import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
-class RecipesViewModel(application: Application) : AndroidViewModel(application) {
+class RecipesViewModel @ViewModelInject constructor(
+    application: Application,
+    private val dataStoreRepository: DataStoreRepository
+) : AndroidViewModel(application) {
+    private var mealType = DEFAULT_MEAL_TYPE
+    private var dietType = DEFAULT_DIET_TYPE
+
+    val readMealAndDietType = dataStoreRepository.readMealAndDietType
+
+    fun saveMealAndDietType(mealType: String, mealTypeId: Int, dietType: String, dietTypeId: Int) =
+        viewModelScope.launch(Dispatchers.IO) {
+            dataStoreRepository.saveMealAndDietType(mealType, mealTypeId, dietType, dietTypeId)
+        }
+
     fun applyQueries(): HashMap<String, String> {
         val queries: HashMap<String, String> = HashMap()
 
-        queries[Constants.QUERY_NUMBER] = "50"
-        queries[Constants.QUERY_API_KEY] = Constants.API_KEY
-        queries[Constants.QUERY_TYPE] = "snack"
-        queries[Constants.QUERY_DIET] = "vegan"
-        queries[Constants.QUERY_ADD_RECIPE_INFORMATION] = "true"
-        queries[Constants.QUERY_FILL_INGREDIENTS] = "true"
+        viewModelScope.launch {
+            readMealAndDietType.collect { value ->
+                mealType = value.selectedMealType
+                dietType = value.selectedDietType
+            }
+        }
+
+        queries[QUERY_NUMBER] = DEFAULT_RECIPES_NUMBER
+        queries[QUERY_API_KEY] = API_KEY
+        queries[QUERY_TYPE] = mealType
+        queries[QUERY_DIET] = dietType
+        queries[QUERY_ADD_RECIPE_INFORMATION] = "true"
+        queries[QUERY_FILL_INGREDIENTS] = "true"
 
         return queries
     }
+
 }

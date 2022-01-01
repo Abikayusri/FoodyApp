@@ -8,6 +8,7 @@ import android.app.Application
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
+import android.widget.Toast
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
 import kotlinx.coroutines.Dispatchers
@@ -16,8 +17,8 @@ import retrofit2.Response
 
 class MainViewModel @ViewModelInject constructor(
     private val repository: Repository,
-    application: Application
-) : AndroidViewModel(application) {
+    private val application1: Application
+) : AndroidViewModel(application1) {
 
     /** ROOM DATABASE */
 
@@ -48,7 +49,8 @@ class MainViewModel @ViewModelInject constructor(
                     offlineCacheRecipes(foodRecipe)
                 }
             } catch (e: Exception) {
-                recipesResponse.value = NetworkResult.Error("Recipes not found.")
+                recipesResponse.value = NetworkResult.Error("Recipes not found 1.")
+                Toast.makeText(application1.applicationContext, "Recipes not found 1.", Toast.LENGTH_SHORT).show()
             }
         } else {
             recipesResponse.value = NetworkResult.Error("No Internet Connection.")
@@ -69,7 +71,8 @@ class MainViewModel @ViewModelInject constructor(
                 return NetworkResult.Error("API Key Limited.")
             }
             response.body()!!.results.isNullOrEmpty() -> {
-                return NetworkResult.Error("Recipes not found.")
+                Toast.makeText(application1.applicationContext, "Recipes not found 2.", Toast.LENGTH_SHORT).show()
+                return NetworkResult.Error("Recipes not found. 2")
             }
             response.isSuccessful -> {
                 val foodRecipes = response.body()
