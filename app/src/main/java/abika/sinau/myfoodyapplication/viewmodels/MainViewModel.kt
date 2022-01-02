@@ -2,7 +2,7 @@ package abika.sinau.myfoodyapplication.viewmodels
 
 import abika.sinau.myfoodyapplication.data.Repository
 import abika.sinau.myfoodyapplication.data.database.RecipesEntity
-import abika.sinau.myfoodyapplication.models.FoodRecipe
+import abika.sinau.myfoodyapplication.models.NewModel
 import abika.sinau.myfoodyapplication.util.NetworkResult
 import android.app.Application
 import android.content.Context
@@ -31,8 +31,8 @@ class MainViewModel @ViewModelInject constructor(
 
     /** Retrofit */
 
-    var recipesResponse: MutableLiveData<NetworkResult<FoodRecipe>> = MutableLiveData()
-    var searchedRecipesResponse: MutableLiveData<NetworkResult<FoodRecipe>> = MutableLiveData()
+    var recipesResponse: MutableLiveData<NetworkResult<NewModel>> = MutableLiveData()
+    var searchedRecipesResponse: MutableLiveData<NetworkResult<NewModel>> = MutableLiveData()
 
     fun getRecipes(queries: Map<String, String>) = viewModelScope.launch {
         getRecipesSafeCall(queries)
@@ -50,12 +50,16 @@ class MainViewModel @ViewModelInject constructor(
                 recipesResponse.value = handleFoodRecipesResponse(response)
 
                 val foodRecipe = recipesResponse.value!!.data
-                if(foodRecipe != null) {
+                if (foodRecipe != null) {
                     offlineCacheRecipes(foodRecipe)
                 }
             } catch (e: Exception) {
                 recipesResponse.value = NetworkResult.Error("Recipes not found 1.")
-                Toast.makeText(application1.applicationContext, "Recipes not found 1.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    application1.applicationContext,
+                    "Recipes not found 1.",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         } else {
             recipesResponse.value = NetworkResult.Error("No Internet Connection.")
@@ -76,12 +80,12 @@ class MainViewModel @ViewModelInject constructor(
         }
     }
 
-    private fun offlineCacheRecipes(foodRecipe: FoodRecipe) {
+    private fun offlineCacheRecipes(foodRecipe: NewModel) {
         val recipesEntity = RecipesEntity(foodRecipe)
         insertRecipes(recipesEntity)
     }
 
-    private fun handleFoodRecipesResponse(response: Response<FoodRecipe>): NetworkResult<FoodRecipe>? {
+    private fun handleFoodRecipesResponse(response: Response<NewModel>): NetworkResult<NewModel>? {
         when {
             response.message().toString().contains("timeout") -> {
                 return NetworkResult.Error("Timeout")
@@ -90,7 +94,11 @@ class MainViewModel @ViewModelInject constructor(
                 return NetworkResult.Error("API Key Limited.")
             }
             response.body()!!.results.isNullOrEmpty() -> {
-                Toast.makeText(application1.applicationContext, "Recipes not found 2.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    application1.applicationContext,
+                    "Recipes not found 2.",
+                    Toast.LENGTH_SHORT
+                ).show()
                 return NetworkResult.Error("Recipes not found. 2")
             }
             response.isSuccessful -> {

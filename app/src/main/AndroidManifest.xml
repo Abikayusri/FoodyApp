@@ -16,6 +16,10 @@
         android:theme="@style/Theme.MyFoodyApplication"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".ui.DetailsActivity"
+            android:exported="false"
+            android:theme="@style/DetailsActivityStyle" />
+        <activity
             android:name=".ui.MainActivity"
             android:exported="true">
             <intent-filter>

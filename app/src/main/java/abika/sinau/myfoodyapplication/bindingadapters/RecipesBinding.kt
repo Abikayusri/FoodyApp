@@ -1,7 +1,7 @@
 package abika.sinau.myfoodyapplication.bindingadapters
 
 import abika.sinau.myfoodyapplication.data.database.RecipesEntity
-import abika.sinau.myfoodyapplication.models.FoodRecipe
+import abika.sinau.myfoodyapplication.models.NewModel
 import abika.sinau.myfoodyapplication.util.NetworkResult
 import android.view.View
 import android.widget.ImageView
@@ -16,7 +16,7 @@ class RecipesBinding {
         @JvmStatic
         fun errorImageViewVisibility(
             imageView: ImageView,
-            apiResponse: NetworkResult<FoodRecipe>?,
+            apiResponse: NetworkResult<NewModel>?,
             database: List<RecipesEntity>?
         ) {
             if (apiResponse is NetworkResult.Error && database.isNullOrEmpty()) {
@@ -32,7 +32,7 @@ class RecipesBinding {
         @JvmStatic
         fun errorTextViewVisibility(
             textView: TextView,
-            apiResponse: NetworkResult<FoodRecipe>?,
+            apiResponse: NetworkResult<NewModel>?,
             database: List<RecipesEntity>?
         ) {
             if (apiResponse is NetworkResult.Error && database.isNullOrEmpty()) {

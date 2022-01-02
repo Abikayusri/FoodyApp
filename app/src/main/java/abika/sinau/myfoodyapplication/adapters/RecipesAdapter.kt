@@ -1,8 +1,7 @@
 package abika.sinau.myfoodyapplication.adapters
 
 import abika.sinau.myfoodyapplication.databinding.RecipesRowLayoutBinding
-import abika.sinau.myfoodyapplication.models.FoodRecipe
-import abika.sinau.myfoodyapplication.models.Result
+import abika.sinau.myfoodyapplication.models.NewModel
 import abika.sinau.myfoodyapplication.util.RecipesDiffUtil
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -11,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 
 class RecipesAdapter : RecyclerView.Adapter<RecipesAdapter.MyViewHolder>() {
 
-    private var recipes = emptyList<Result>()
+    private var recipes = emptyList<NewModel.Result>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         return MyViewHolder.from(parent)
@@ -26,7 +25,7 @@ class RecipesAdapter : RecyclerView.Adapter<RecipesAdapter.MyViewHolder>() {
 
     class MyViewHolder(private val binding: RecipesRowLayoutBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(result: Result) {
+        fun bind(result: NewModel.Result) {
             binding.result = result
             binding.executePendingBindings()
         }
@@ -40,13 +39,13 @@ class RecipesAdapter : RecyclerView.Adapter<RecipesAdapter.MyViewHolder>() {
         }
     }
 
-    fun setData(newData: FoodRecipe) {
+    fun setData(newData: NewModel) {
 //        recipes = newData.results
 //        notifyDataSetChanged()
 
         val recipesDiffUtil = RecipesDiffUtil(recipes, newData.results)
         val diffUtilResult = DiffUtil.calculateDiff(recipesDiffUtil)
-        recipes = newData.results
+        recipes = newData.results as List<NewModel.Result>
         diffUtilResult.dispatchUpdatesTo(this)
     }
 }

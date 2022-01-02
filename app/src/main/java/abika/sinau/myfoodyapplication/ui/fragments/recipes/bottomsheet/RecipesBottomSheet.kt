@@ -3,6 +3,7 @@ package abika.sinau.myfoodyapplication.ui.fragments.recipes.bottomsheet
 import abika.sinau.myfoodyapplication.R
 import abika.sinau.myfoodyapplication.util.Constants.Companion.DEFAULT_DIET_TYPE
 import abika.sinau.myfoodyapplication.util.Constants.Companion.DEFAULT_MEAL_TYPE
+import abika.sinau.myfoodyapplication.util.navigateOrNull
 import abika.sinau.myfoodyapplication.viewmodels.RecipesViewModel
 import android.os.Bundle
 import android.util.Log
@@ -70,7 +71,11 @@ class RecipesBottomSheet : BottomSheetDialogFragment() {
                 RecipesBottomSheetDirections.actionRecipesBottomSheetToRecipesFragment(
                     backFromBottomSheet = true
                 )
-            findNavController().navigate(action)
+            findNavController().navigateOrNull(
+                RecipesBottomSheetDirections.actionRecipesBottomSheetToRecipesFragment(
+                    backFromBottomSheet = true
+                )
+            )
         }
 
         return mView
