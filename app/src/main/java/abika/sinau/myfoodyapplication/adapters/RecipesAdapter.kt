@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 
 class RecipesAdapter : RecyclerView.Adapter<RecipesAdapter.MyViewHolder>() {
 
-    private var recipes = emptyList<NewModel.Result>()
+    private var recipes = emptyList<NewModel.Result?>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         return MyViewHolder.from(parent)
@@ -25,7 +25,7 @@ class RecipesAdapter : RecyclerView.Adapter<RecipesAdapter.MyViewHolder>() {
 
     class MyViewHolder(private val binding: RecipesRowLayoutBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(result: NewModel.Result) {
+        fun bind(result: NewModel.Result?) {
             binding.result = result
             binding.executePendingBindings()
         }
@@ -43,9 +43,9 @@ class RecipesAdapter : RecyclerView.Adapter<RecipesAdapter.MyViewHolder>() {
 //        recipes = newData.results
 //        notifyDataSetChanged()
 
-        val recipesDiffUtil = RecipesDiffUtil(recipes, newData.results)
+        val recipesDiffUtil = RecipesDiffUtil(recipes, newData.results as List<*>)
         val diffUtilResult = DiffUtil.calculateDiff(recipesDiffUtil)
-        recipes = newData.results as List<NewModel.Result>
+        recipes = newData.results
         diffUtilResult.dispatchUpdatesTo(this)
     }
 }
